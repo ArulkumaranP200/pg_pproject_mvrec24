@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Movierec24 - Premium Movie Recommendations</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #0a0a1a;
+            --secondary-color: #16213e;
+            --accent-color: #e50914;
+            --text-color: #ffffff;
+            --light-text: #a9a9a9;
+        }
+        
+        body, html {
+            margin: 0;
+            padding: 0;
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--primary-color);
+            color: var(--text-color);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        header {
+            background-color: rgba(10, 10, 26, 0.8);
+            backdrop-filter: blur(10px);
+            padding: 1rem 2rem;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 20px rgba(0,0,0,0.5);
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .logo {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: var(--accent-color);
+            font-family: 'Playfair Display', serif;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+
+        .nav-links {
+            list-style: none;
+            display: flex;
+        }
+
+        .nav-links li {
+            margin-left: 2rem;
+            position: relative;
+        }
+
+        .nav-links a {
+            color: var(--text-color);
+            text-decoration: none;
+            transition: color 0.3s ease;
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+
+        .nav-links a:hover {
+            color: var(--accent-color);
+        }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: rgba(22, 33, 62, 0.9);
+            min-width: 180px;
+            box-shadow: 0px 8px 16px rgba(0,0,0,0.4);
+            z-index: 1;
+            border-radius: 8px;
+            overflow: hidden;
+            backdrop-filter: blur(5px);
+        }
+
+        .dropdown-content a {
+            color: var(--text-color);
+            padding: 12px 16px;
+            display: block;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        .dropdown-content a:hover {
+            background-color: var(--accent-color);
+            color: white;
+        }
+
+        .dropdown:hover .dropdown-content {
+            display: block;
+        }
+
+        main {
+            padding: 8rem 2rem 4rem;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(rgba(10, 10, 26, 0.7), rgba(10, 10, 26, 0.7)), url('/api/placeholder/1920/1080') no-repeat center center/cover;
+            background-attachment: fixed;
+        }
+
+        h2 {
+            font-size: 3rem;
+            color: var(--text-color);
+            margin-bottom: 1.5rem;
+            font-family: 'Playfair Display', serif;
+            text-align: center;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+
+        .search-container {
+            width: 100%;
+            max-width: 700px;
+            margin-bottom: 3rem;
+        }
+
+        .search-bar {
+            display: flex;
+            width: 100%;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+        }
+
+        .search-bar input {
+            flex-grow: 1;
+            padding: 1.2rem;
+            font-size: 1.1rem;
+            border: none;
+            border-radius: 50px 0 0 50px;
+            background-color: rgba(255, 255, 255, 0.1);
+            color: var(--text-color);
+            outline: none;
+        }
+
+        .search-bar button {
+            padding: 1.2rem 2.5rem;
+            background-color: var(--accent-color);
+            color: white;
+            border: none;
+            border-radius: 0 50px 50px 0;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+            font-size: 1.1rem;
+        }
+
+        .search-bar button:hover {
+            background-color: #ff0a16;
+            transform: scale(1.05);
+        }
+
+        .section {
+            display: none;
+            padding: 3rem;
+            background-color: rgba(22, 33, 62, 0.9);
+            border-radius: 12px;
+            margin-top: 3rem;
+            max-width: 900px;
+            width: 100%;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            backdrop-filter: blur(10px);
+        }
+
+        .section.active {
+            display: block;
+            animation: fadeIn 0.5s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        footer {
+            background-color: var(--secondary-color);
+            color: var(--light-text);
+            text-align: center;
+            padding: 2rem;
+            margin-top: auto;
+        }
+
+        .premium-badge {
+            background-color: gold;
+            color: var(--primary-color);
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            font-weight: bold;
+            font-size: 0.9rem;
+            margin-left: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .feature-card {
+            background-color: rgba(255, 255, 255, 0.05);
+            padding: 2rem;
+            border-radius: 12px;
+            text-align: center;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+        }
+
+        .feature-icon {
+            font-size: 3rem;
+            color: var(--accent-color);
+            margin-bottom: 1rem;
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+            
+            main {
+                padding-top: 6rem;
+            }
+
+            h2 {
+                font-size: 2.5rem;
+            }
+
+            .search-bar input, .search-bar button {
+                font-size: 1rem;
+                padding: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo">Movierec24<span class="premium-badge">Premium</span></div>
+            <ul class="nav-links">
+                <li class="dropdown">
+                    <a href="#" onclick="showHome()">Home</a>
+                    <div class="dropdown-content">
+                        <a href="#" onclick="toggleSection('filmi-buzz')">Filmi Buzz</a>
+                        <a href="#" onclick="toggleSection('about')">About</a>
+                    </div>
+                </li>
+                <li><a href="#" onclick="toggleSection('contact-us')">Contact Us</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <div class="home-content">
+            <h2>Elevate Your Cinematic Journey</h2>
+            <div class="search-container">
+                <form class="search-bar" method="post" action="/search">
+                    <input type="text" name="keyword" placeholder="Discover your next favorite movie...">
+                    <button type="submit"><i class="fas fa-search"></i> Explore</button>
+                </form>
+            </div>
+            <p>Immerse yourself in a world of curated recommendations tailored to your unique taste.</p>
+            
+            <div class="features-grid">
+                <div class="feature-card">
+                    <i class="fas fa-film feature-icon"></i>
+                    <h3>Personalized Picks</h3>
+                    <p>AI-driven recommendations based on your viewing history</p>
+                </div>
+                <div class="feature-card">
+                    <i class="fas fa-star feature-icon"></i>
+                    <h3>Exclusive Content</h3>
+                    <p>Access to premium movie insights and behind-the-scenes</p>
+                </div>
+                <div class="feature-card">
+                    <i class="fas fa-users feature-icon"></i>
+                    <h3>Community</h3>
+                    <p>Join discussions with fellow movie enthusiasts</p>
+                </div>
+            </div>
+        </div>
+
+        <div id="about" class="section">
+            <h2>About Movierec24 Premium</h2>
+            <p>Movierec24 Premium is your ultimate companion in the world of cinema. Our state-of-the-art recommendation system employs advanced machine learning algorithms to analyze your viewing patterns, ratings, and preferences. We go beyond simple genre matching to uncover hidden gems and blockbusters that align perfectly with your unique taste.</p>
+            <p>With Movierec24 Premium, you'll enjoy:</p>
+            <ul>
+                <li>Ad-free browsing experience</li>
+                <li>Early access to new features</li>
+                <li>Exclusive movie trivia and facts</li>
+                <li>Personalized watchlists and recommendations</li>
+            </ul>
+        </div>
+
+        <div id="filmi-buzz" class="section">
+            <h2>Filmi Buzz: Your Hollywood Insider</h2>
+            <p>Stay ahead of the curve with Filmi Buzz, your premium source for all things cinema. From exclusive interviews with A-list celebrities to sneak peeks of upcoming blockbusters, we bring you closer to the magic of movies.</p>
+            <p>Our team of expert critics and industry insiders provide:</p>
+            <ul>
+                <li>In-depth analysis of latest releases</li>
+                <li>Breaking news from film festivals worldwide</li>
+                <li>Spotlight on emerging talents and indie gems</li>
+                <li>Nostalgic deep dives into classic films</li>
+            </ul>
+        </div>
+
+        <div id="contact-us" class="section">
+            <h2>Connect With Our Premium Support</h2>
+            <p>As a valued Movierec24 Premium member, you have access to our dedicated support team. We're here to enhance your movie discovery experience and address any questions or concerns you may have.</p>
+            <p>Reach out to us at: <br><strong>premium.support@movierec24.com</strong></p>
+            <p>Our support hours: 24/7, because great movies never sleep!</p>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 Movierec24 Premium - Redefining Your Cinema Experience</p>
+    </footer>
+
+    <script>
+        function toggleSection(sectionId) {
+            var sections = document.querySelectorAll('.section');
+            sections.forEach(function(section) {
+                section.classList.remove('active');
+            });
+            var homeContent = document.querySelector('.home-content');
+            homeContent.style.display = 'none';
+            var section = document.getElementById(sectionId);
+            section.classList.add("active");
+        }
+
+        function showHome() {
+            var sections = document.querySelectorAll('.section');
+            sections.forEach(function(section) {
+                section.classList.remove('active');
+            });
+            var homeContent = document.querySelector('.home-content');
+            homeContent.style.display = 'block';
+        }
+    </script>
+</body>
+</html>

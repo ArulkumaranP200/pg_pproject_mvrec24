@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Movie Search Results</title>
+    <style>
+        body {
+            background-image: url('/static/b.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            font-family: Arial, sans-serif; /* Optional: Add a font family */
+        }
+
+        h2 {
+            text-align: center; /* Center the title */
+            color: #ffffff; /* Change title color for visibility */
+        }
+
+        table {
+            width: 80%; /* Set a larger width */
+            margin: 0 auto; /* Center the table */
+            border-collapse: collapse;
+            background-color: rgba(255, 255, 255, 0.9); /* Light background for the table */
+            border-radius: 10px; /* Optional: Rounded corners */
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1); /* Optional: Shadow effect */
+        }
+
+        th, td {
+            padding: 15px; /* Increase padding for better spacing */
+            text-align: left;
+            border: 1px solid #ddd; /* Light border */
+        }
+
+        th {
+            background-color: #4CAF50; /* Premium green color for header */
+            color: white; /* White text color for contrast */
+            font-size: 1.2em; /* Slightly larger font size for header */
+        }
+
+        tr:nth-child(even) {
+            background-color: #f2f2f2; /* Light grey for even rows */
+        }
+
+        tr:hover {
+            background-color: #ddd; /* Highlight on hover */
+        }
+    </style>
+</head>
+<body>
+
+    <h2>Search Results</h2>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Title</th>
+                <th>Year</th>
+                <th>Lead Actor</th>
+                <th>Co-Actor</th>
+                <th>Director</th>
+                <th>IMDB Score</th>
+                <th>Genres</th>
+                <th>Language</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for row in result %}
+            <tr>
+                <td>{{ row[0] }}</td>
+                <td>{{ row[1] }}</td>
+                <td>{{ row[2] }}</td>
+                <td>{{ row[3] }}</td>
+                <td>{{ row[4] }}</td>
+                <td>{{ row[5] }}</td>
+                <td>{{ row[8] }}</td>
+                <td>{{ row[9] }}</td>
+
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+</body>
+</html>
